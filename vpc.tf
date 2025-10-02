@@ -1,5 +1,5 @@
 ###VPC
-resource "aws_vpc" "vpc_example" {
+resource "aws_vpc" "nextcloud_vpc" {
   cidr_block = var.vpc_cidr
   tags = var.tags
 }
