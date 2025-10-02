@@ -60,20 +60,12 @@ variable "ecs_cluster_name" {
   default     = "NextcloudECSCluster"
 }
 
-variable "user_data_ecs" {
-  description = "User data script for ECS instances"
-  default = base64encode(<<-EOF
-              #!/bin/bash
-              echo ECS_CLUSTER=${var.ecs_cluster_name} >> /etc/ecs/ecs.config
-              EOF
-            )
-}
 
 ### AIM Role ------------------------------
 
 variable "role_policy" {
   description = "The policy document for the IAM role"
-  default     = jsonencode({
+  default     = {
     Version = "2012-10-17"
     Statement = [
       {
@@ -84,7 +76,7 @@ variable "role_policy" {
         }
       },
     ]
-  })
+  }
 }
 
 variable "ecs_instance_role_policy"{

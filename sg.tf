@@ -24,7 +24,7 @@ resource "aws_security_group" "alb_sg"{
         from_port = 0
         to_port = 0
         protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0 "]
+        cidr_blocks = ["0.0.0.0/0"]
         description = "Allow all outbound traffic"
     }
 }
@@ -41,21 +41,21 @@ resource "aws_security_group" "rds_sg"{
         to_port = 5432
         protocol = "tcp"
         description = "Allow HTTP traffic from ECS"
-        security_groups = [aws_security_group.ecs_sg.id]
+        cidr_blocks = ["0.0.0.0/0"]
     }
     egress {
-        from_port = 5432
-        to_port = 5432
-        protocol = "tcp"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
         description = "Allow outbound traffic to ECS"
-        security_groups = [aws_security_group.ecs_sg.id]
+        cidr_blocks = ["0.0.0.0/0"]
     }
 }
 
 
 ### Security Group for ECS Instances
 resource "aws_security_group" "ecs_sg"{
-    name = "alb_sg"
+    name = "ecs_sg"
     description = "Security Group for SCS"
     vpc_id = aws_vpc.nextcloud_vpc.id
     tags = var.tags

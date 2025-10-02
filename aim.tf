@@ -1,6 +1,6 @@
-resource "aws_aim_role" "ecs_instance_role"{
+resource "aws_iam_role" "ecs_instance_role"{
     name = "ecsInstanceRole"
-    assume_role_policy = var.role_policy
+    assume_role_policy = jsonencode(var.role_policy)
     tags = var.tags
 }
 

@@ -4,13 +4,17 @@ data "aws_ssm_parameter" "ecs_ami" {
 }
 resource "aws_launch_template" "ecs_lt" {
     name_prefix = "ecs-lt-"
-    image_id = aws_ssm_parameter.ecs_ami.value
+    image_id = data.aws_ssm_parameter.ecs_ami.value
     instance_type = var.instance_type
 
     vpc_security_group_ids = [aws_security_group.ecs_sg.id]
 
-    aws_iam_instance_profile {
-        name = aws_iam_instance_profile.ecsInstanceProfile.name
+    iam_instance_profile {
+        name = aws_iam_instance_profile.ecs_instance_profile.name
     }
-    user_data = var.user_data_ecs
+    user_data = base64encode(<<-EOF
+              #!/bin/bash
+              echo ECS_CLUSTER=${var.ecs_cluster_name} >> /etc/ecs/ecs.config
+              EOF
+    )
 }
