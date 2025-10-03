@@ -19,13 +19,12 @@ variable "private_subnet_ecs_cidr" {
   description = "The CIDR block for the ECS private subnet"
   default     = "10.0.2.0/24"
 }
-
 variable "private_subnet_db_cidr"{
   description = "The CIDR block for the DB private subnet"
   default = "10.0.3.0/24"
 }
 
-##tags--------------------------------------------
+## tags--------------------------------------------
 variable "tags" {
   description = "A map of tags to assign to resources"
   type        = map(string)
@@ -49,7 +48,7 @@ variable "ami_id" {
   default     = "ami-052064a798f08f0d3"
 }
 
-### ECS SSM Path ------------------------------
+### ECS ------------------------------
 variable "ecs_ssm_path" {
   description = "The SSM parameter path for the ECS optimized AMI"
   default = "/aws/service/ecs/optimized-ami/amazon-linux-2023/recommended/image_id"
@@ -60,6 +59,17 @@ variable "ecs_cluster_name" {
   default     = "NextcloudECSCluster"
 }
 
+#Container--------------------------------------
+
+variable "nextcloud_image" {
+  description = "The Docker image for Nextcloud"
+  default     = "nextcloud:27-apache"
+}
+
+variable "container_name" {
+  description = "The name of the Nextcloud container"
+  default     = "nextcloud"
+}
 
 ### AIM Role ------------------------------
 

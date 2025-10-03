@@ -37,11 +37,11 @@ resource "aws_security_group" "rds_sg"{
     tags = var.tags
 
     ingress {
-        from_port = 5432
-        to_port = 5432
+        from_port = 3306
+        to_port = 3306
         protocol = "tcp"
         description = "Allow HTTP traffic from ECS"
-        cidr_blocks = ["0.0.0.0/0"]
+        security_groups = [aws_security_group.ecs_sg.id]
     }
     egress {
         from_port = 0
@@ -68,11 +68,11 @@ resource "aws_security_group" "ecs_sg"{
         security_groups = [aws_security_group.alb_sg.id]
     }
     egress {
-        from_port = 5432
-        to_port = 5432
-        protocol = "tcp"
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
         description = "Allow outbound traffic to RDS"
-        security_groups = [aws_security_group.rds_sg.id]
+        cidr_blocks = ["0.0.0.0/0"] 
     }
 }
 

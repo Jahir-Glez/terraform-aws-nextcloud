@@ -12,9 +12,24 @@ resource "aws_launch_template" "ecs_lt" {
     iam_instance_profile {
         name = aws_iam_instance_profile.ecs_instance_profile.name
     }
-    user_data = base64encode(<<-EOF
-              #!/bin/bash
-              echo ECS_CLUSTER=${var.ecs_cluster_name} >> /etc/ecs/ecs.config
+    user_data = base64encode( <<-EOF
+              #!/usr/bin/env bash
+              echo "ECS_CLUSTER=${var.ecs_cluster_name}" >> /etc/ecs/ecs.config
               EOF
     )
+}
+
+### Auto Scaling Group
+resource "aws_autoscaling_group" "ecs_asg" {
+    desired_capacity     = 1
+    max_size             = 2
+    min_size             = 1
+    health_check_type    = "EC2"
+    vpc_zone_identifier  = [aws_subnet.private_subnet_ecs.id]
+    target_group_arns   = [aws_lb_target_group.ecs_tg.arn]
+    
+    launch_template {
+        id      = aws_launch_template.ecs_lt.id
+        version = "$Latest"
+    }
 }

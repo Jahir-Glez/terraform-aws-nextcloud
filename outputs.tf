@@ -1,7 +1,4 @@
-
-###outputs
-output "instance_id" {
-  value = aws_instance.example.id
+output "alb_dns_name" {
+  value = aws_lb.alb.dns_name
+  description = "The DNS name of the Application Load Balancer"
 }
-
-
