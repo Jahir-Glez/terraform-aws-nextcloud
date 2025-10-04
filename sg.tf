@@ -56,7 +56,7 @@ resource "aws_security_group" "rds_sg"{
 ### Security Group for ECS Instances
 resource "aws_security_group" "ecs_sg"{
     name = "ecs_sg"
-    description = "Security Group for SCS"
+    description = "Security Group for ECS"
     vpc_id = aws_vpc.nextcloud_vpc.id
     tags = var.tags
 
@@ -66,6 +66,13 @@ resource "aws_security_group" "ecs_sg"{
         protocol = "tcp"
         description = "Allow HTTP traffic from ALB"
         security_groups = [aws_security_group.alb_sg.id]
+    }
+    ingress {
+       from_port = 22
+      to_port = 22
+        protocol = "tcp"
+        description = "Allow HTTPS traffic from ALB"
+        cidr_blocks = ["0.0.0.0/0"]
     }
     egress {
         from_port = 0

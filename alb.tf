@@ -21,7 +21,7 @@ resource "aws_lb" "alb" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
   subnets            = [aws_subnet.public_subnet_a.id, aws_subnet.public_subnet_b.id]
-  tags = var.tags
+  tags               = var.tags
 }
 
 resource "aws_lb_listener" "alb_listener" {

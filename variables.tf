@@ -19,9 +19,9 @@ variable "private_subnet_ecs_cidr" {
   description = "The CIDR block for the ECS private subnet"
   default     = "10.0.2.0/24"
 }
-variable "private_subnet_db_cidr"{
+variable "private_subnet_db_cidr" {
   description = "The CIDR block for the DB private subnet"
-  default = "10.0.3.0/24"
+  default     = "10.0.3.0/24"
 }
 
 ## tags--------------------------------------------
@@ -33,14 +33,14 @@ variable "tags" {
     environment = "Test"
     owner       = "Jahir"
     project     = "Nextcloud"
-    team      = "DevOps"
+    team        = "DevOps"
   }
 }
 
 ### EC2 --------------------------------------
 variable "instance_type" {
   description = "The type of instance to use"
-  default     = "t3.micro"
+  default     = "t3.small"
 }
 
 variable "ami_id" {
@@ -51,7 +51,7 @@ variable "ami_id" {
 ### ECS ------------------------------
 variable "ecs_ssm_path" {
   description = "The SSM parameter path for the ECS optimized AMI"
-  default = "/aws/service/ecs/optimized-ami/amazon-linux-2023/recommended/image_id"
+  default     = "/aws/service/ecs/optimized-ami/amazon-linux-2023/recommended/image_id"
 }
 
 variable "ecs_cluster_name" {
@@ -75,7 +75,7 @@ variable "container_name" {
 
 variable "role_policy" {
   description = "The policy document for the IAM role"
-  default     = {
+  default = {
     Version = "2012-10-17"
     Statement = [
       {
@@ -84,12 +84,18 @@ variable "role_policy" {
         Principal = {
           Service = "ec2.amazonaws.com"
         }
-      },
+      }
     ]
   }
 }
 
-variable "ecs_instance_role_policy"{
+variable "ecs_instance_role_policy" {
   description = "The ARN of the policy to attach to the ECS instance role"
-  default = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+  default     = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+### S3 Bucket ------------------------------
+variable "s3_bucket_name" {
+  description = "The name of the S3 bucket for Nextcloud data"
+  default     = "nextcloud-data-bucket-1sadfassdfgtrethss32" # Change this to a unique bucket name
 }
