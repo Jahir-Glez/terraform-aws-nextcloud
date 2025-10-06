@@ -12,17 +12,11 @@ resource "aws_launch_template" "ecs_lt" {
   iam_instance_profile {
     name = aws_iam_instance_profile.ecs_instance_profile.name
   }
-  user_data = base64encode(<<-EOF
-        #!/usr/bin/env bash
-        echo "ECS_CLUSTER=${var.ecs_cluster_name}" > /etc/ecs/ecs.config
-       
-
-EOF
-
-chmod 644 /ecs/nextcloud/config/config.php
-
-        EOF
-  )
+  user_data = base64encode(templatefile("./user_data.sh.tmpl", {
+    efs_dns_name     = aws_efs_file_system.nextcloud_efs.id
+    ecs_cluster_name = var.ecs_cluster_name
+    region           = var.region
+  }))
 }
 
 ### Auto Scaling Group

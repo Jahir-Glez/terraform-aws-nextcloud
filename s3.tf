@@ -21,10 +21,7 @@ resource "aws_s3_bucket_policy" "nextcloud_access" {
           AWS = aws_iam_role.ecs_instance_role.arn
         }
         Action = [
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject",
-          "s3:ListBucket"
+          "s3:*"
         ]
         Resource = [
           aws_s3_bucket.nextcloud_s3_bucket.arn,

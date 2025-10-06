@@ -1,107 +1,131 @@
 ### Security Group for ALB
-resource "aws_security_group" "alb_sg"{
-    name = "alb_sg"
-    description = "Security Group for ALB"
-    vpc_id = aws_vpc.nextcloud_vpc.id
-    tags = var.tags
+resource "aws_security_group" "alb_sg" {
+  name        = "alb_sg"
+  description = "Security Group for ALB"
+  vpc_id      = aws_vpc.nextcloud_vpc.id
+  tags        = var.tags
 
-    ingress {
-        from_port = 80
-        to_port = 80
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-        description = "Allow HTTP traffic from anywhere"
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow HTTP traffic from anywhere"
 
-    }
-    ingress {
-        from_port = 443
-        to_port = 443
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-        description = "Allow HTTPS traffic from anywhere"
-    }
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-        description = "Allow all outbound traffic"
-    }
-}
-
-### Security Group for RDS
-resource "aws_security_group" "rds_sg"{
-    name = "rds_sg"
-    description = "Security Group for RDS"
-    vpc_id = aws_vpc.nextcloud_vpc.id
-    tags = var.tags
-
-    ingress {
-        from_port = 3306
-        to_port = 3306
-        protocol = "tcp"
-        description = "Allow HTTP traffic from ECS"
-        security_groups = [aws_security_group.ecs_sg.id]
-    }
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        description = "Allow outbound traffic to ECS"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-}
-
-
-### Security Group for ECS Instances
-resource "aws_security_group" "ecs_sg"{
-    name = "ecs_sg"
-    description = "Security Group for ECS"
-    vpc_id = aws_vpc.nextcloud_vpc.id
-    tags = var.tags
-
-    ingress {
-        from_port = 80
-        to_port = 80
-        protocol = "tcp"
-        description = "Allow HTTP traffic from ALB"
-        security_groups = [aws_security_group.alb_sg.id]
-    }
-    ingress {
-       from_port = 22
-      to_port = 22
-        protocol = "tcp"
-        description = "Allow HTTPS traffic from ALB"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        description = "Allow outbound traffic to RDS"
-        cidr_blocks = ["0.0.0.0/0"] 
-    }
-}
-
-### Security Group for VPC Endpoints
-resource "aws_security_group" "vpc_endpoints_sg"{
-    name = "vpc_endpoints_sg"
-    description = "Security Group for VPC Endpoint"
-    vpc_id = aws_vpc.nextcloud_vpc.id
-    tags = var.tags
-
-    ingress {
-        from_port = 443
-        to_port = 443
-        protocol = "tcp"
-        description = "Allow HTTP traffic from ALB"
-        security_groups = [aws_security_group.ecs_sg.id]
-    }
-     egress {
+  }
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow HTTPS traffic from anywhere"
+  }
+  egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
     description = "Allow all outbound traffic"
-    }
+  }
+}
+
+### Security Group for RDS
+resource "aws_security_group" "rds_sg" {
+  name        = "rds_sg"
+  description = "Security Group for RDS"
+  vpc_id      = aws_vpc.nextcloud_vpc.id
+  tags        = var.tags
+
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    description     = "Allow HTTP traffic from ECS"
+    security_groups = [aws_security_group.ecs_sg.id]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    description = "Allow outbound traffic to ECS"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
+### Security Group for ECS Instances
+resource "aws_security_group" "ecs_sg" {
+  name        = "ecs_sg"
+  description = "Security Group for ECS"
+  vpc_id      = aws_vpc.nextcloud_vpc.id
+  tags        = var.tags
+
+  ingress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    description     = "Allow HTTP traffic from ALB"
+    security_groups = [aws_security_group.alb_sg.id]
+  }
+  ingress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    description     = "Allow HTTPS traffic from EFS"
+    security_groups = [aws_security_group.efs_sg.id]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    description = "Allow outbound traffic to RDS"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+### Security Group for VPC Endpoints
+resource "aws_security_group" "vpc_endpoints_sg" {
+  name        = "vpc_endpoints_sg"
+  description = "Security Group for VPC Endpoint"
+  vpc_id      = aws_vpc.nextcloud_vpc.id
+  tags        = var.tags
+
+  ingress {
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    description     = "Allow HTTP traffic from ALB"
+    security_groups = [aws_security_group.ecs_sg.id]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
+  }
+}
+
+### Security Group for EFS
+
+resource "aws_security_group" "efs_sg" {
+  name        = "efs_sg"
+  description = "Security Group for EFS"
+  vpc_id      = aws_vpc.nextcloud_vpc.id
+  tags        = var.tags
+
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    description = "Allow NFS traffic from ECS"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
+  }
 }

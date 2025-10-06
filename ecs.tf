@@ -12,7 +12,6 @@ resource "aws_ecs_task_definition" "nextcloud_task" {
   cpu                      = "512"
   memory                   = "1024"
   tags                     = var.tags
-
   container_definitions = jsonencode([
     {
       name      = var.container_name
@@ -43,9 +42,47 @@ resource "aws_ecs_task_definition" "nextcloud_task" {
         {
           name  = "MYSQL_PASSWORD"
           value = "NEXTCLOUD_PASSWORD"
+        },
+        ######S3
+        {
+          name  = "OBJECTSTORE_S3_BUCKET"
+          value = "nextcloud-data-bucket-1sadfassdfgtrethss32"
+        },
+        {
+          name  = "OBJECTSTORE_S3_REGION"
+          value = "us-east-1"
+        },
+        {
+          name  = "OBJECTSTORE_S3_HOST"
+          value = "s3.amazonaws.com"
+        },
+        {
+          name  = "OBJECTSTORE_S3_AUTOCREATE"
+          value = "false"
         }
       ]
+      mountPoints = [
+        {
+          sourceVolume  = "nextcloud_data"
+          containerPath = "/var/www/html/data"
+          readOnly      = false
+        },
+        {
+          sourceVolume  = "nextcloud_config"
+          containerPath = "/var/www/html/config"
+          readOnly      = false
+        }
+      ]
+
   }])
+  volume {
+    name = "nextcloud_data"
+    host_path = "/mnt/efs/data"
+  }
+  volume {
+    name = "nextcloud_config"
+    host_path = "/mnt/efs/config"
+  }
 }
 
 resource "aws_ecs_service" "nextcloud_service" {
