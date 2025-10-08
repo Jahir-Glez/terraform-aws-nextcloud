@@ -26,6 +26,12 @@ resource "aws_ecs_task_definition" "nextcloud_task" {
           protocol      = "tcp"
         }
       ]
+      secrets = [
+        {
+          name      = "MYSQL_PASSWORD"
+          valueFrom = aws_secretsmanager_secret.db_secret.arn
+        }
+      ]
       environment = [
         {
           name  = "MYSQL_HOST"
@@ -33,24 +39,20 @@ resource "aws_ecs_task_definition" "nextcloud_task" {
         },
         {
           name  = "MYSQL_DATABASE"
-          value = "nextcloud" ######## MODIFY THIS####!!!!!!!!
+          value = var.db_name 
         },
         {
           name  = "MYSQL_USER"
-          value = "NEXTCLOUD_USER"
-        },
-        {
-          name  = "MYSQL_PASSWORD"
-          value = "NEXTCLOUD_PASSWORD"
+          value = var.db_username 
         },
         ######S3
         {
           name  = "OBJECTSTORE_S3_BUCKET"
-          value = "nextcloud-data-bucket-1sadfassdfgtrethss32"
+          value = var.s3_bucket_name
         },
         {
           name  = "OBJECTSTORE_S3_REGION"
-          value = "us-east-1"
+          value = var.region
         },
         {
           name  = "OBJECTSTORE_S3_HOST"

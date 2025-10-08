@@ -97,5 +97,24 @@ variable "ecs_instance_role_policy" {
 ### S3 Bucket ------------------------------
 variable "s3_bucket_name" {
   description = "The name of the S3 bucket for Nextcloud data"
-  default     = "nextcloud-data-bucket-1sadfassdfgtrethss32" # Change this to a unique bucket name
+  type = string # Change this to a unique bucket name
+}
+
+### RDS VARIABLES ------------------------------
+variable "db_username"{
+  description = "The username for the RDS database"
+  type       = string     ###### This uses a variable from secrets.tfvars
+  sensitive = true
+}
+
+variable "db_name" {
+  description = "The name of the RDS database"
+  type       = string     ###### This uses a variable from secrets.tfvars
+  sensitive = true
+}
+
+### SNS ------------------------------
+variable "alert_email" {
+  description = "The email address to receive SNS alerts"
+  type       = string     ###### This uses a variable from secrets.tfvars
 }
