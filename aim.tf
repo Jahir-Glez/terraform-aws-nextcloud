@@ -39,9 +39,8 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy_attach
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-resource "aws_iam_role_policy" "ecs_secrets_manager_policy" {
+resource "aws_iam_policy" "ecs_secrets_manager_policy" {
   name        = "SecretsManagerAccessPolicy"
-  role        = aws_iam_role.ecs_task_execution_role.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -49,12 +48,16 @@ resource "aws_iam_role_policy" "ecs_secrets_manager_policy" {
         Effect = "Allow"
         Action = [
           "secretsmanager:GetSecretValue",
-          "secretsmanager:DescribeSecret"
+          "secretsmanager:DescribeSecret",
         ]
-        Resource = "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.account.account_id}:secret:db_credentials-*"
+        Resource = aws_secretsmanager_secret.db_secret.arn
       }
     ]
   })
+}
+resource "aws_iam_role_policy_attachment" "ecs_secrets_manager_policy_attachment" {
+  role = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = aws_iam_policy.ecs_secrets_manager_policy.arn 
 }
 
 ### CLOUD TRAIL ROLE ------------------------------
@@ -87,18 +90,17 @@ resource "aws_iam_policy" "cloudtrail_policy" {
           "logs:PutLogEvents"
         ]
         Resource = [
-          "${aws_cloudwatch_log_group.nextcloud_log_group.arn}:*"
+          "arn:aws:logs:${var.region}:${data.aws_caller_identity.account.account_id}:log-group:ecs/secrets_manager_logs:*"
         ]
       },
       {
         Effect = "Allow"
         Action = [
-          "s3:GetBucketAcl",
-          "s3:PutObject"
+          "s3:*"
         ]
         Resource = [
-          "${aws_s3_bucket.nextcloud_s3_bucket_logs.arn}",
-          "${aws_s3_bucket.nextcloud_s3_bucket_logs.arn}/AWSLogs/${data.aws_caller_identity.account.account_id}/*"
+          "${aws_s3_bucket.secrets_manager_bucket_logs.arn}",
+          "${aws_s3_bucket.secrets_manager_bucket_logs.arn}/AWSLogs/${data.aws_caller_identity.account.account_id}/*"
         ]
       }
     ]

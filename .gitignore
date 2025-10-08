@@ -3,3 +3,13 @@
 .terraform/providers/registry.terraform.io/hashicorp/aws/6.14.1/linux_amd64/terraform-provider-aws_v6.14.1_x5
 secrets.tfvars
 terraform.tfvars
+terraform.tfstate
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/providers/registry.terraform.io/hashicorp/aws/6.15.0/linux_amd64/terraform-provider-aws_v6.15.0_x5
+.terraform/providers/registry.terraform.io/hashicorp/random/3.7.2/linux_amd64/terraform-provider-random_v3.7.2_x5
+terraform.tfstate.backup
+terraform.tfstate
+
+.terraform/providers/registry.terraform.io/hashicorp/random/3.7.2/linux_amd64/LICENSE.txt
+.terraform/providers/registry.terraform.io/hashicorp/aws/6.15.0/linux_amd64/LICENSE.txt
