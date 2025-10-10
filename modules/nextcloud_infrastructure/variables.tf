@@ -1,42 +1,7 @@
-## SECRETS
-variable "db_secret_name" {
-  description = "database secret name"
-  type = string
-}
-
-# MONITORING
-
-# variable "secret_arn" {
-#   description = "ARN of the Secrets Manager secret for monitoring"
-#   type        = string
-# }
-
-variable "topic_name" {
-  description = "SNS topic name for alerts"
+variable "secretsmanager_secret_arn" {
+  description = "ARN of the Secrets Manager secret"
   type        = string
 }
-
-variable "alert_email" {
-  description = "Email address for alert notifications"
-  type        = string
-}
-
-# variable "cloudtrail_s3_bucket_name" {
-#   description = "S3 bucket name for CloudTrail logs"
-#   type        = string
-# }
-
-variable "log_retention_days" {
-  description = "Number of days to retain logs in CloudWatch"
-  type        = number
-}
-
-variable "log_s3_expiration_days" {
-  description = "Number of days before logs in S3 expire"
-  type        = number
-}
-
-# SHARED
 
 variable "region" {
   description = "AWS region"
@@ -44,11 +9,9 @@ variable "region" {
 }
 
 variable "tags" {
-  description = "Common tags for all resources"
+  description = "Common tags applied to all resources"
   type        = map(string)
 }
-
-# NEXTCLOUD INFRASTRUCTURE
 
 variable "alb_name" {
   description = "Name of the Application Load Balancer"
@@ -56,67 +19,67 @@ variable "alb_name" {
 }
 
 variable "target_group_name" {
-  description = "Target group name"
+  description = "Name of the target group for the ALB"
   type        = string
 }
 
 variable "target_group_port" {
-  description = "Port for the ALB target group"
+  description = "Port for the target group"
   type        = number
 }
 
 variable "ecs_ssm_path" {
-  description = "SSM parameter path for ECS"
+  description = "SSM path for ECS secrets or parameters"
   type        = string
 }
 
 variable "instance_type" {
-  description = "Instance type for ECS EC2 instances"
+  description = "Instance type for the ECS instances"
   type        = string
 }
 
 variable "desired_capacity" {
-  description = "ASG desired capacity"
+  description = "Desired number of instances in ASG"
   type        = number
 }
 
 variable "max_size" {
-  description = "ASG maximum size"
+  description = "Max number of instances in ASG"
   type        = number
 }
 
 variable "min_size" {
-  description = "ASG minimum size"
+  description = "Min number of instances in ASG"
   type        = number
 }
 
 variable "ecs_cluster_name" {
-  description = "Name of ECS Cluster"
+  description = "Name of the ECS cluster"
   type        = string
 }
 
 # variable "task_cpu" {
-#   description = "CPU units for ECS task"
+#   description = "CPU units for the ECS task"
 #   type        = number
 # }
 
 # variable "task_memory" {
-#   description = "Memory for ECS task in MiB"
+#   description = "Memory for the ECS task (in MiB)"
 #   type        = number
 # }
 
 variable "nextcloud_image" {
-  description = "Docker image for Nextcloud"
+  description = "Docker image for Nextcloud container"
   type        = string
 }
 
 variable "container_cpu" {
-  description = "CPU units for the container"
+  description = "CPU units for the Nextcloud container"
   type        = number
 }
 
 variable "container_memory" {
-  description = "Memory for the container in MiB"
+  description = "Memory for the container"
   type        = number
 }
 
@@ -126,23 +89,23 @@ variable "container_port" {
 }
 
 variable "db_name" {
-  description = "Database name"
+  description = "Name of the RDS database"
   type        = string
 }
 
 variable "db_username" {
-  description = "Database username"
+  description = "Username for the RDS database"
   type        = string
 }
 
-# variable "db_password" {
-#   description = "Database password"
-#   type        = string
-#   sensitive   = true
-# }
+variable "db_password_secrets_manager" {
+  description = "Password for the RDS database"
+  type        = string
+  sensitive   = true
+}
 
 # variable "db_port" {
-#   description = "Port for the RDS database"
+#   description = "Port the RDS database listens on"
 #   type        = number
 # }
 
@@ -157,12 +120,12 @@ variable "instance_class" {
 }
 
 variable "allocated_storage" {
-  description = "Storage allocated to RDS (in GB)"
+  description = "Allocated storage for RDS (in GB)"
   type        = number
 }
 
 variable "zone_name" {
-  description = "Route 53 hosted zone name"
+  description = "Hosted zone name in Route 53"
   type        = string
 }
 
@@ -177,7 +140,7 @@ variable "domain_name" {
 }
 
 variable "vpc_cidr" {
-  description = "CIDR block for VPC"
+  description = "CIDR block for the VPC"
   type        = string
 }
 

@@ -1,0 +1,37 @@
+#! /usr/bin/env bash
+
+yum update -y
+yum install -y amazon-efs-utils 
+mkdir -p /mnt/efs
+
+
+for i in {1..10}; do
+  if mount -t efs {{ efs_name }}:/ /mnt/efs; then
+    echo "EFS mounted successfully."
+    break
+  else
+    echo "Attempt $i: Failed to mount EFS. Retrying in 5 seconds..."
+    sleep 5
+  fi
+done
+
+DATA_PATH="/mnt/efs/data"
+CONFIG_PATH="/mnt/efs/config"
+
+if [ ! -d "$DATA_PATH" ]; then
+  mkdir -p "$DATA_PATH"
+  chown -R root:root "$DATA_PATH"
+  chmod 777 "$DATA_PATH"
+fi
+
+if [ ! -d "$CONFIG_PATH" ]; then
+  mkdir -p "$CONFIG_PATH"
+  chown root:root "$CONFIG_PATH"
+  chmod 777 "$CONFIG_PATH"
+fi
+
+#umount /mnt/efs
+
+### link the cluster
+echo "ECS_CLUSTER=${ecs_cluster_name}" >> /etc/ecs/ecs.config
+
