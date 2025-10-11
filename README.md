@@ -34,7 +34,7 @@ This project sets up **Nextcloud** on **AWS** using **Terraform** to provide sec
 
 ## Requirements
 
-- [Terraform](https://www.terraform.io/) (This version has been tasted and is compatible with **Terraform v1.13.3** ).
+- [Terraform](https://www.terraform.io/) (This version has been tasted and is compatible with **Terraform v1.13.3**).
 - An **AWS** account with sufficient permissions to create the necessary infrastructure (EC2, RDS, S3, IAM, etc.).
 
 ## Getting Started
