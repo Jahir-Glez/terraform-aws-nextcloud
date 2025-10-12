@@ -4,7 +4,7 @@ db_secret_name = "dbsecret-v3"
 
 # Monitoring module
 topic_name                = "nextcloud-alerts"
-alert_email               = "jahir.g.g@outlook.com"
+alert_email               = "jahir@test.com" #<--- email
 log_retention_days        = 7
 log_s3_expiration_days    = 30
 
@@ -45,16 +45,16 @@ db_username = "admin"
 #db_port     = 3306
 
 # S3
-s3_bucket_name = "cloudbyjahir-nextcloud-2025-10-10"
+s3_bucket_name = "jahir-nextcloud-2025-10-1"
 
 # RDS
 instance_class     = "db.t3.micro"
 allocated_storage  = 20
 
 # Route 53 / DNS
-zone_name      = "cloudbyjahir.xyz."
-subdomain_fqdn = "next.cloudbyjahir.xyz"
-domain_name    = "cloudbyjahir.xyz"
+zone_name      = "website.com."  #<<<----  Change zone name (it finish with a dot)
+subdomain_fqdn = "nextcloud.website.com"#<<<--- change subdomain
+domain_name    = "nextcloud.website.com"# <<--- Change domain_name
 
 # Networking
 vpc_cidr                 = "10.0.0.0/16"
