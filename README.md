@@ -42,7 +42,7 @@ This project sets up **Nextcloud** on **AWS** using **Terraform** to provide sec
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/NeroXrX/terraform-aws-nextcloud.git
+   git clone https://github.com/Jahir-Glez/terraform-aws-nextcloud.git
    cd terraform-aws-nextcloud
    
 2. **Configure Terraform**:    
